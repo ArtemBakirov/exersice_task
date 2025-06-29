@@ -2,7 +2,7 @@
   "name": "immo-managment-app",
   "version": "0.0.0",
   "engines": {
-    "node": "20.19.0"
+    "node": "21.0.0"
   },
   "scripts": {
     "ng": "ng",
