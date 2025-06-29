@@ -7,7 +7,7 @@
 
 # set the node version
 [tools]
-    node = "22.12.0"
+    node = "20.19.0"
 
 # setup phase where we add any needed packages
 [phases.setup]
