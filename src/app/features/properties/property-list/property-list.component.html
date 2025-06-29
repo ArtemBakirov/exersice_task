@@ -1,0 +1,37 @@
+<div class="flex justify-between items-center mb-6">
+  <h2 class="text-2xl font-bold text-gray-800">Immobilien</h2>
+  <a
+    routerLink="new"
+    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow transition"
+  >
+    + Neu
+  </a>
+</div>
+
+<ul class="space-y-4">
+  @for (p of properties; track p.id) {
+    <li class="p-4 bg-white border border-gray-200 rounded shadow-sm flex justify-between items-start">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-800">{{ p.description }}</h3>
+        <p class="text-sm text-gray-600">
+          {{ p.address.street }}, {{ p.address.zipCode }} {{ p.address.city }}
+        </p>
+      </div>
+      <div class="flex gap-2">
+        <a
+          [routerLink]="['/properties', p.id]"
+          [queryParams]="{ mode: 'edit' }"
+          class="text-sm px-3 py-1 bg-yellow-400 hover:bg-yellow-500 text-white rounded transition"
+        >
+          ✏️ Bearbeiten
+        </a>
+        <button
+          (click)="deleteProperty(p.id)"
+          class="text-sm px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded transition"
+        >
+          🗑️ Löschen
+        </button>
+      </div>
+    </li>
+  }
+</ul>

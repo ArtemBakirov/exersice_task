@@ -1,0 +1,30 @@
+<form class="max-w-xl p-4 space-y-4 border rounded bg-white shadow">
+  <h2 class="text-xl font-bold">
+    {{ mode === 'create' ? 'Neue Immobilie' : mode === 'edit' ? 'Immobilie bearbeiten' : 'Immobilien-Details' }}
+  </h2>
+
+  <!-- description -->
+  <div>
+    {{mode}}
+    <app-input [disabled]="mode === 'view'" [required]="true" [inputValue]="description" label="Beschreibung"/>
+  </div>
+
+  <!-- autocomplete input -->
+  @if (mode !== 'view') {
+    <div>
+      <app-address-input (addressSelected)="onAddressSelected($event)" />
+    </div>
+  }
+
+  <!-- address fields  -->
+  <div class="grid grid-cols-2 gap-4 ">
+    <app-input [disabled]="mode === 'view'" [required]="true" [inputValue]="street" label="Straße"/>
+    <app-input [disabled]="mode === 'view'" [required]="true" [inputValue]="city" label="Stadt"/>
+    <app-input [disabled]="mode === 'view'" [required]="true" [inputValue]="zipCode" label="Plz"/>
+    <app-input [disabled]="mode === 'view'" [required]="true" [inputValue]="country" label="Land"/>
+  </div>
+
+  @if (mode !== 'view') {
+    <button (click)="onSubmit()" type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Speichern</button>
+  }
+</form>

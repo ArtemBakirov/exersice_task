@@ -1,45 +1,123 @@
+
+<p align="center">
+  <img src="https://media.licdn.com/dms/image/v2/C4E0BAQEUu2uBOwIcTQ/company-logo_200_200/company-logo_200_200/0/1651738810220/scalara_logo?e=1756944000&v=beta&t=Yq3VZD1X56ODr_Nm018G_NZIAHDnvNOBGYd9YzpL-GE" alt="Scalarla Logo" width="120" />
+</p>
+
+# 📘 **Dokumentation zur Angular Signal-basierten (Zoneless) ImmoManager-Anwendung**
+
 ---
-title: Angular + TypeScript + Caddy
-description: The default Angular TS starter, utilizing `Caddy` to serve the built single page app
-tags:
-  - Node
-  - Angular 19
-  - TypeScript
-  - Caddy
+
+## 📄 Inhaltsverzeichnis
+
+- [🔧 Architekturübersicht](#-architekturübersicht)
+- [🧱 Komponentenstruktur](#-komponentenstruktur)
+- [💡 Reaktive Formulare mit Signals](#-reaktive-formulare-mit-signals)
+- [🧩 Wiederverwendbare Eingabekomponenten](#-wiederverwendbare-eingabekomponenten)
+- [📦 Autocomplete & Google Places](#-autocomplete--google-places)
+- [🎨 UI & Sidebar Styling](#-ui--sidebar-styling)
+- [📐 Validierungen & UX-Verhalten](#-validierungen--ux-verhalten)
+- [🌀 Zoneless Setup & TailwindCSS](#-zoneless-setup--tailwindcss)
+- [✅ Fazit & Testhinweise](#-fazit--testhinweise)
+
 ---
 
-# Angular + TypeScript + Caddy
+## 🔧 Architekturübersicht
 
-This project was originally generated with [`ng new my-app`](https://angular.dev/tools/cli/setup-local#create-a-workspace-and-initial-application)
+Die Anwendung wurde mit modernen Angular 20 Features umgestellt. In der letzten Presentation von Angular 20 wurde den Entwicklern eine **Zoneless** Architektur empfohlen:
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/13NBfA?referralCode=brody)
+- **Zoneless** Betrieb ohne `zone.js`.
+- Verwendung von **Signals**, **Computed Signals** & **Effects** für State-Management.
+- **TailwindCSS** für ein modernes UI-Design.
+- **Stand-alone Komponenten** zur besseren Wiederverwendbarkeit.
 
-## ✨ Features
+---
 
-- Angular 19 + TypeScript + Caddy
-- Caddy v2
+## 🧱 Komponentenstruktur
 
-## 💁‍♀️ Local Development
 
-- Install required dependencies with `npm install`
-- Run `npm run dev` for a dev server
-- Navigate to `http://127.0.0.1:4200/`. The application will automatically reload if you change any of the source files.
+Jede Detail-Komponente (`property`, `contact`, `relation`) verwaltet ihre eigenen Signale und Formulare. Validierungen und Änderungen erfolgen live.
+Jedes Feature hat ihren eigenen Folder mit dem entsprechenden Komponenten-Logic.
+Wiederverwendbare Komponenten werden im `shared` Folder definiert.
+Die daten werden von Services geladen.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+---
 
-## ❓ Why use `Caddy` when deploying to Railway?
+## 💡 Reaktive Formulare mit Signals
 
-Caddy is a powerful, enterprise-ready, open source web server, and therefore Caddy is far better suited to serve websites than `ng serve` is, using Caddy will result in much less memory and cpu usage compared to serving with `ng serve` (much lower running costs too)
+Beispiel für ein Form-Control mit Signalbindung:
 
-To see how this is achieved with nixpacks, check out the fully documented nixpacks.toml file in this repository
+```ts
+description = signal('');
+effect(() => {
+  const value = description();
+  // Trigger bei Änderung
+});
+```
 
-The configuration for Caddy is called a Caddyfile, and you can edit that file to further suite your needs, by default it comes configured to serve a single page app for Angular, and to also gzip the responses
+In der Komponente erfolgt `@Input() inputValue: WritableSignal<...>` zur Übergabe.
 
-**Relevant Caddy documentation:**
+---
 
-- [The Caddyfile](https://caddyserver.com/docs/caddyfile)
-- [Caddyfile Directives](https://caddyserver.com/docs/caddyfile/directives)
-- [root](https://caddyserver.com/docs/caddyfile/directives/root)
-- [encode](https://caddyserver.com/docs/caddyfile/directives/encode)
-- [file_server](https://caddyserver.com/docs/caddyfile/directives/file_server)
-- [try_files](https://caddyserver.com/docs/caddyfile/directives/try_files)
+## 🧩 Wiederverwendbare Eingabekomponenten
+
+### ✅ `app-input`
+
+```ts
+@Input() type: 'text' | 'date' | 'select' | 'tags';
+@Input() inputValue: WritableSignal<string | number | string[]>;
+@Input() options?: string[];
+```
+
+### Unterstützung für:
+
+- `text`, `date`, `select`, `tags`
+- `select`: Dropdown mit Optionen
+- `date`: für Zeiträume
+- Validation-Message: Wird dynamisch angezeigt mit `touched` Signal
+
+---
+
+## 📦 Autocomplete & Google Places
+
+**`address-input`** verwendet `google.maps.places.Autocomplete`:
+
+- Selektiert eine Adresse
+- Emit `addressSelected`-Event mit strukturierter Adresse:
+  - `street`, `city`, `zipCode`, `country`
+- Integration in `property-detail` über `onAddressSelected()`.
+
+---
+
+## 🎨 UI & Sidebar Styling
+
+### Sidebar basiert auf folgendem Layout:
+
+- Farben:
+  - Hintergrund: `#EBEEE8`
+  - Akzentfarbe: `#8CC63F` (Grün aus Screenshot)
+- Tailwind-Klassen: `hover:bg-green-500`, `font-semibold`, `rounded-md`
+- Aktiver Zustand:
+  ```ts
+  isActive(route: string): boolean {
+    return this.router.url === route;
+  }
+  ```
+
+Icons: `material-symbols-outlined` verwendet.
+
+---
+
+## 📐 Validierungen & UX-Verhalten
+
+- Live-Validation via `required`, property.
+- Visuelles Feedback via Tailwind (`border-red-500`, `text-red-600`)
+- Fehler erst nach User-Eingriff (`touched` Signal)
+
+---
+
+## ✅ Fazit
+
+- Die App verwendet modernste Angular-Konzepte.
+- **Forms** sind vollständig signalbasiert und ohne Template-Driven Code.
+- Tailwind bietet konsistentes Design über alle Komponenten hinweg.
+

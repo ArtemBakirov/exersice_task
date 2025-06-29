@@ -1,0 +1,40 @@
+<div class="flex justify-between items-center mb-6">
+  <h2 class="text-2xl font-bold text-gray-800">Beziehungen</h2>
+  <a
+    routerLink="new"
+    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow"
+  >
+    + Neue Beziehung
+  </a>
+</div>
+
+<ul class="space-y-4">
+  @for (r of relations; track r.id) {
+    <li class="p-4 bg-white border border-gray-200 rounded shadow-sm flex justify-between items-start">
+      <div class="text-sm">
+        <p><strong>Kontakt:</strong> {{ getContactName(r.contactId) }}</p>
+        <p><strong>Immobilie:</strong> {{ getPropertyDescription(r.propertyId) }}</p>
+        <p><strong>Typ:</strong> {{ r.type }}</p>
+        <p><strong>Zeitraum:</strong> {{ r.startDate }} – {{ r.endDate }}</p>
+        @if (r.type === 'Dienstleister') {
+          <p><strong>Dienstleistungen:</strong> {{ r.services?.join(', ') }}</p>
+        }
+      </div>
+      <div class="flex gap-2">
+        <a
+          [routerLink]="['/relations', r.id]"
+          [queryParams]="{ mode: 'edit' }"
+          class="text-sm px-3 py-1 bg-yellow-400 hover:bg-yellow-500 text-white rounded"
+        >
+          ✏️ Bearbeiten
+        </a>
+        <button
+          (click)="deleteRelation(r.id)"
+          class="text-sm px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded"
+        >
+          🗑️ Löschen
+        </button>
+      </div>
+    </li>
+  }
+</ul>

@@ -1,0 +1,45 @@
+<form class="max-w-xl p-6 bg-white shadow rounded space-y-4">
+  <h2 class="text-xl font-bold">
+    {{ mode === 'create' ? 'Neuer Kontakt' : mode === 'edit' ? 'Kontakt bearbeiten' : 'Kontakt-Details' }}
+  </h2>
+
+  <div>
+    <app-input [disabled]="mode === 'view'" [required]="true" [inputValue]="name" label="Straße"/>
+  </div>
+
+
+     @if (mode !== 'view') {
+       <div>
+         <app-address-input (addressSelected)="onAddressSelected($event)" />
+       </div>
+     }
+
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <app-input [disabled]="mode === 'view'" label="Hausnummer" [required]="true" [inputValue]="street" />
+    </div>
+    <div>
+      <app-input [disabled]="mode === 'view'" label="Stadt" [required]="true" [inputValue]="city" />
+    </div>
+    <div>
+      <app-input [disabled]="mode === 'view'" label="Plz" [required]="true" [inputValue]="zipCode" />
+    </div>
+    <div>
+      <app-input [disabled]="mode === 'view'" label="Land" [required]="true" [inputValue]="country" />
+    </div>
+  </div>
+
+  @if (mode !== 'view') {
+    <button (click)="onSubmit()" type="submit" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded">Speichern</button>
+  } @else{
+    <div>
+      Relations with this contact:
+      <div class="flex flex-col gap-4">
+        @for (relation of contactsRelations; track relation.id) {
+          <app-relation-summary [relation]="relation"/>
+        }
+      </div>
+
+    </div>
+  }
+</form>

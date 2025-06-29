@@ -1,0 +1,40 @@
+<form class="max-w-xl p-6 bg-white shadow rounded space-y-4">
+  <h2 class="text-xl font-bold">
+    {{ mode === 'create' ? 'Neue Beziehung' : 'Beziehung bearbeiten' }}
+  </h2>
+
+  <div>
+   <app-input [disabled]="mode === 'view'" type="select" [options]="contactOptions" [required]="true" [inputValue]="contactId" label="Kontakt"/>
+ </div>
+
+  <div>
+    <app-input [disabled]="mode === 'view'" type="select" [options]="propertyOptions" [required]="true" [inputValue]="propertyId" label="Immobilie" />
+  </div>
+
+  <div>
+    <app-input [disabled]="mode === 'view'" label="Beziehungstyp" type="select" [options]="relationTypes" [required]="true" [inputValue]="type" />
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+    @if (type() !== 'Eigentümer') {
+      <div>
+        <app-input [disabled]="mode === 'view'" label="Startdatum" type="date" [required]="true" [inputValue]="startDate" />
+      </div>
+      <div>
+        <app-input type="date" [disabled]="mode === 'view'" label="Enddatum" [required]="true" [inputValue]="endDate" />
+      </div>
+    }@else{
+      <div>
+        <app-input type="date" [disabled]="mode === 'view'" label="Kaufdatum" [required]="true" [inputValue]="startDate" />
+      </div>
+    }
+  </div>
+
+  @if (type() === 'Dienstleister') {
+    <div>
+      <app-input type="tags" [disabled]="mode === 'view'" label="Dienstleistungen:" [required]="true" [inputValue]="services" />
+    </div>
+  }
+
+  <button (click)="onSubmit()" type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Speichern</button>
+</form>

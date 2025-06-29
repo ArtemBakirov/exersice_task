@@ -1,0 +1,8 @@
+<div class="p-4 bg-white border rounded shadow-sm">
+  <p><strong>Immobilie:</strong> {{ propertyName }}</p>
+  <p><strong>Typ:</strong> {{ relation.type }}</p>
+  <p><strong>Zeitraum:</strong> {{ relation.startDate }} – {{ relation.endDate }}</p>
+  <ng-container *ngIf="relation.type === 'Dienstleister'">
+    <p><strong>Dienstleistungen:</strong> {{ relation.services?.join(', ') }}</p>
+  </ng-container>
+</div>

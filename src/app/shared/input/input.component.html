@@ -1,0 +1,60 @@
+<div class="space-y-1">
+  <label class="block font-semibold text-sm">{{ label }}</label>
+
+  @if(type === 'select') {
+    <select
+      [ngModel]="inputValue()"
+      (ngModelChange)="inputValue.set($event)"
+      class="w-full p-2 border rounded focus:outline-none focus:ring focus:ring-blue-300"
+      [class.border-red-500]="required && !inputValue() && touched()"
+    >
+      <option value="">Bitte auswählen</option>
+
+      @for(opt of options; track opt){
+        <option [value]="opt">{{ opt }}</option>
+      }
+    </select>
+  }@else if (type === 'tags') {
+    <div>
+      <input
+        [ngModel]="tempInput"
+        (ngModelChange)="tempInput = $event"
+        [placeholder]="placeholder"
+        class="w-full p-2 border rounded"
+      />
+
+      <button
+        type="button"
+        class="mt-1 px-2 py-1 text-sm bg-blue-500 text-white rounded"
+        (click)="addTag()"
+      >
+        Hinzufügen
+      </button>
+
+      <div class="mt-2 flex flex-wrap gap-2">
+          @for(tag of tags(); track tag){
+            <span
+                class="bg-gray-200 px-2 py-1 rounded text-sm"
+            >
+              {{ tag }}
+            </span>
+          }
+      </div>
+    </div>
+  } @else{
+    <!--[formControl]="control"-->
+    <input
+      [ngModel]="inputValue()"
+      (ngModelChange)="inputValue.set($event)"
+      [type]="type"
+      [placeholder]="placeholder ||label"
+      class="w-full p-2 border rounded focus:outline-none focus:ring focus:ring-blue-300"
+      [class.border-red-500]="required && !inputValue() && touched()"
+    />
+  }
+  @if(required && !inputValue() && touched()) {
+    <div class="text-sm text-red-600">
+      {{ label }} ist ein Pflichtfeld !
+    </div>
+  }
+</div>
