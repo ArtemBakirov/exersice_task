@@ -16,8 +16,7 @@
 - [📦 Autocomplete & Google Places](#-autocomplete--google-places)
 - [🎨 UI & Sidebar Styling](#-ui--sidebar-styling)
 - [📐 Validierungen & UX-Verhalten](#-validierungen--ux-verhalten)
-- [🌀 Zoneless Setup & TailwindCSS](#-zoneless-setup--tailwindcss)
-- [✅ Fazit & Testhinweise](#-fazit--testhinweise)
+- [✅ Fazit](#-fazit)
 
 ---
 
